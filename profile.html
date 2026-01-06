@@ -22,7 +22,9 @@
       --radius-md: 14px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -37,18 +39,28 @@
       overflow-x: hidden;
     }
 
-    /* ===== NAV (SAME THEME + CLOCK POSITION SAME) ===== */
+    /* =========================
+      NAVBAR MODERN (ANTI-LAG)
+      - no blur/backdrop-filter
+      - animasi ringan (transform/opacity)
+       ========================= */
     .nav-glass {
       position: sticky;
       top: 0;
       z-index: 999;
-      backdrop-filter: blur(12px);
-      background:
-        linear-gradient(180deg, rgba(2, 4, 10, 0.95), rgba(2, 4, 10, 0.70)),
-        radial-gradient(700px 120px at 30% 0%, rgba(0, 229, 255, 0.10), transparent 60%),
-        radial-gradient(700px 120px at 70% 0%, rgba(122, 77, 255, 0.10), transparent 60%);
+      background: rgba(2, 4, 10, 0.86);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.62);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
     .brand {
@@ -66,10 +78,9 @@
       width: 34px;
       height: 34px;
       border-radius: 999px;
-      background:
-        conic-gradient(from 180deg, rgba(0, 229, 255, 0.65), rgba(122, 77, 255, 0.65), rgba(0, 229, 255, 0.65));
+      background: conic-gradient(from 180deg, rgba(0, 229, 255, 0.65), rgba(122, 77, 255, 0.65), rgba(0, 229, 255, 0.65));
       border: 1px solid rgba(255, 255, 255, 0.10);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
       position: relative;
     }
 
@@ -84,48 +95,125 @@
 
     .brand .title {
       color: var(--cyan);
-      text-shadow: 0 0 16px rgba(0, 229, 255, 0.40);
+      text-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .nav-link.jjk {
       color: rgba(230, 241, 255, 0.86) !important;
-      font-weight: 850;
+      font-weight: 900;
       padding: 10px 14px;
       border-radius: 999px;
-      transition: all 0.25s ease;
+      text-decoration: none;
+      transition: transform .18s ease, background-color .18s ease, box-shadow .18s ease, color .18s ease;
+      will-change: transform;
       position: relative;
-    }
-
-    .nav-link.jjk::after {
-      content: "";
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 6px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
-      opacity: 0;
-      transform: translateY(6px);
-      transition: all 0.25s ease;
     }
 
     .nav-link.jjk:hover {
       background: rgba(255, 255, 255, 0.06);
       color: #fff !important;
+      transform: translateY(-1px);
       box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-    }
-
-    .nav-link.jjk:hover::after {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     .nav-link.jjk.active {
       color: var(--cyan) !important;
-      background: rgba(0, 229, 255, 0.10);
+      background: rgba(0, 229, 255, 0.12);
       box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.18) inset;
     }
 
+    .nav-link.jjk .beam {
+      display: block;
+      height: 2px;
+      border-radius: 999px;
+      margin-top: 6px;
+      opacity: 0;
+      transform: scaleX(0.6);
+      transform-origin: left center;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .nav-link.jjk:hover .beam,
+    .nav-link.jjk.active .beam {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .nav-collapse {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+
+    .nav-toggler {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, background-color .18s ease;
+      will-change: transform;
+    }
+
+    .nav-toggler:hover {
+      transform: scale(1.03);
+    }
+
+    .burger {
+      width: 18px;
+      height: 12px;
+      position: relative;
+    }
+
+    .burger span {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      border-radius: 99px;
+      background: rgba(230, 241, 255, 0.92);
+      transition: transform .18s ease, opacity .18s ease, top .18s ease;
+    }
+
+    .burger span:nth-child(1) {
+      top: 0;
+    }
+
+    .burger span:nth-child(2) {
+      top: 5px;
+    }
+
+    .burger span:nth-child(3) {
+      top: 10px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .nav-link.jjk,
+      .nav-link.jjk .beam,
+      .nav-toggler,
+      .burger span {
+        transition: none !important;
+      }
+    }
+
+    /* ===== CLOCK (KEEP POSITION) ===== */
     .clock-pill {
       background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
       border: 1px solid rgba(255, 255, 255, 0.10);
@@ -140,21 +228,27 @@
       overflow: hidden;
     }
 
+    /* shimmer ringan */
     .clock-pill::before {
       content: "";
       position: absolute;
       inset: -40px;
       background: linear-gradient(120deg, transparent 40%, rgba(0, 229, 255, 0.10), rgba(122, 77, 255, 0.10), transparent 60%);
       transform: translateX(-30%);
-      opacity: 0.7;
-      filter: blur(10px);
+      opacity: 0.55;
+      filter: blur(6px);
       pointer-events: none;
-      animation: shimmer 5s linear infinite;
+      animation: shimmer 6s linear infinite;
     }
 
     @keyframes shimmer {
-      0% { transform: translateX(-40%); }
-      100% { transform: translateX(40%); }
+      0% {
+        transform: translateX(-40%);
+      }
+
+      100% {
+        transform: translateX(40%);
+      }
     }
 
     .clock-dot {
@@ -183,7 +277,9 @@
     }
 
     /* ===== PAGE ===== */
-    .page { padding: 28px 16px 60px; }
+    .page {
+      padding: 28px 16px 60px;
+    }
 
     /* ===== PROFILE HEADER ===== */
     .profile-hero {
@@ -214,7 +310,11 @@
       pointer-events: none;
     }
 
-    .profile-hero .wrap { position: relative; z-index: 1; padding: 22px; }
+    .profile-hero .wrap {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+    }
 
     .headline {
       font-family: 'Cinzel', serif;
@@ -259,7 +359,9 @@
     }
 
     @media (max-width: 992px) {
-      .profile-grid { grid-template-columns: 1fr; }
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .panel {
@@ -283,23 +385,21 @@
       pointer-events: none;
     }
 
-    .panel .inner { position: relative; z-index: 1; padding: 18px; }
+    .panel .inner {
+      position: relative;
+      z-index: 1;
+      padding: 18px;
+    }
 
-    /* ==========================================================
-       AVATAR BOX (CHANGED TO "BANNER CONCEPT" LIKE FIRST HTML)
-       - position tetap
-       - height tetap 300px (GAK DIUBAH)
-       - gambar full kelihatan (contain)
-       ========================================================== */
+    /* AVATAR BOX (banner-style, size tetap) */
     .avatar-box {
       border-radius: 18px;
       overflow: hidden;
       border: 2px solid rgba(0, 229, 255, 0.18);
       box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
-      height: 300px; /* ✅ ukuran tetap */
+      height: 300px;
       background: rgba(0, 0, 0, 0.25);
       position: relative;
-
       display: flex;
       align-items: center;
       justify-content: center;
@@ -308,13 +408,12 @@
     .avatar-box img {
       width: 100%;
       height: 100%;
-      object-fit: contain;   /* ✅ banner-style: gambar utuh, ga kepotong */
+      object-fit: contain;
       object-position: center;
-      transform: none;       /* ✅ ga nge-zoom */
+      transform: none;
       filter: contrast(1.06) saturate(1.06);
       display: block;
-
-      padding: 10px;         /* ✅ frame halus seperti banner */
+      padding: 10px;
       background: rgba(2, 4, 10, 0.55);
     }
 
@@ -325,7 +424,6 @@
       background: linear-gradient(180deg, rgba(2, 4, 10, 0.08), rgba(2, 4, 10, 0.38));
       pointer-events: none;
     }
-    /* ========================================================== */
 
     .id-row {
       display: grid;
@@ -343,8 +441,15 @@
       border: 1px solid rgba(255, 255, 255, 0.10);
     }
 
-    .kv .k { opacity: 0.78; font-weight: 900; }
-    .kv .v { font-weight: 950; color: var(--text); }
+    .kv .k {
+      opacity: 0.78;
+      font-weight: 900;
+    }
+
+    .kv .v {
+      font-weight: 950;
+      color: var(--text);
+    }
 
     .mini-badges {
       display: flex;
@@ -372,7 +477,6 @@
       box-shadow: 0 0 14px rgba(122, 77, 255, 0.7);
     }
 
-    /* right: biography + skills */
     .section-title {
       display: flex;
       align-items: center;
@@ -411,7 +515,10 @@
       margin-bottom: 14px;
     }
 
-    .quote b { color: var(--cyan); text-shadow: 0 0 14px rgba(0, 229, 255, 0.35); }
+    .quote b {
+      color: var(--cyan);
+      text-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+    }
 
     .skills {
       display: grid;
@@ -453,16 +560,14 @@
       overflow: hidden;
     }
 
-    .barline > span {
+    .barline>span {
       display: block;
       height: 100%;
-      width: 60%;
       border-radius: 999px;
       background: linear-gradient(90deg, rgba(0, 229, 255, 0.85), rgba(122, 77, 255, 0.85));
       box-shadow: 0 0 16px rgba(0, 229, 255, 0.28);
     }
 
-    /* ===== TIMELINE ===== */
     .timeline {
       margin-top: 14px;
       display: grid;
@@ -502,7 +607,9 @@
       opacity: 0.7;
     }
 
-    .titem:last-child .dot::after { display: none; }
+    .titem:last-child .dot::after {
+      display: none;
+    }
 
     .titem h5 {
       margin: 0 0 4px;
@@ -518,7 +625,6 @@
       font-weight: 650;
     }
 
-    /* ===== FOOTER ===== */
     .footer {
       margin-top: 22px;
       padding: 24px 14px;
@@ -555,11 +661,12 @@
 </head>
 
 <body>
-  <!-- ===== NAV (CLOCK SAME POSITION) ===== -->
+  <!-- ===== NAVBAR MODERN ===== -->
   <nav class="nav-glass">
     <div class="container py-3">
-      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-        <div class="d-flex align-items-center gap-3">
+
+      <div class="nav-inner">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
           <div class="brand">
             <span class="sigil"></span>
             <span class="title">JUJUTSU HIGH</span>
@@ -570,7 +677,7 @@
           </div>
         </div>
 
-        <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="nav-right">
           <div class="clock-pill" id="clock-pill">
             <span class="clock-dot"></span>
             <div class="d-flex flex-column lh-sm">
@@ -579,29 +686,30 @@
             </div>
           </div>
 
-          <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
-            aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation"
-            style="border:1px solid rgba(255,255,255,0.16);">
-            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+          <button class="nav-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+            aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="burger" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </span>
           </button>
         </div>
       </div>
 
-      <div class="collapse d-lg-block mt-3" id="navMenu">
-        <div class="d-flex gap-2 flex-wrap">
-          <a class="nav-link jjk" href="index.html">HOME</a>
-          <a class="nav-link jjk active" href="profile.html">PROFILE</a>
-          <a class="nav-link jjk" href="album.html">ALBUM</a>
-          <a class="nav-link jjk" href="contact.html">CONTACT</a>
+      <div class="collapse d-lg-block nav-collapse" id="navMenu">
+        <div class="navbar-links">
+          <a class="nav-link jjk" href="index.html">HOME<span class="beam"></span></a>
+          <a class="nav-link jjk active" href="profile.html">PROFILE<span class="beam"></span></a>
+          <a class="nav-link jjk" href="album.html">ALBUM<span class="beam"></span></a>
+          <a class="nav-link jjk" href="contact.html">CONTACT<span class="beam"></span></a>
         </div>
       </div>
+
     </div>
   </nav>
 
   <main class="page">
     <div class="container">
 
-      <!-- ===== HEADER ===== -->
       <section class="profile-hero">
         <div class="wrap">
           <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
@@ -616,9 +724,7 @@
         </div>
       </section>
 
-      <!-- ===== GRID ===== -->
       <section class="profile-grid">
-        <!-- LEFT: IDENTITY -->
         <aside class="panel">
           <div class="inner">
             <div class="avatar-box">
@@ -652,7 +758,6 @@
           </div>
         </aside>
 
-        <!-- RIGHT: BIO + SKILLS + TIMELINE -->
         <article class="panel">
           <div class="inner">
             <div class="section-title">
@@ -750,7 +855,6 @@
         </article>
       </section>
 
-      <!-- ===== FOOTER ===== -->
       <footer class="footer">
         <div class="container">
           <div class="footer-card">
@@ -758,7 +862,8 @@
             <div class="footer-name">IRGIE MUHAMMAD BINTANG MAULANA ROTINSULU</div>
             <div class="sep"></div>
             <div style="font-weight:850; opacity:0.9;">NIM: 251011700034 • Kelas: 01SIFP001</div>
-            <div style="margin-top:8px; font-weight:950; color: var(--purple); text-shadow:0 0 14px rgba(122,77,255,0.35);">
+            <div
+              style="margin-top:8px; font-weight:950; color: var(--purple); text-shadow:0 0 14px rgba(122,77,255,0.35);">
               “FOCUS. CONTROL. EXORCISE.”
             </div>
           </div>
@@ -768,7 +873,6 @@
     </div>
   </main>
 
-  <!-- ===== SCRIPTS (CLOCK) ===== -->
   <script>
     function refreshClock() {
       const now = new Date();
