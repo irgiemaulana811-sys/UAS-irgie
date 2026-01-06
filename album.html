@@ -38,18 +38,29 @@
             overflow-x: hidden;
         }
 
-        /* ===== NAV (SAME THEME + CLOCK POSITION SAME) ===== */
+        /* =========================
+       NAVBAR MODERN (ANTI-LAG)
+       (SAMA KAYAK PROFILE)
+       - no blur/backdrop-filter berat
+       - animasi ringan (transform/opacity)
+       ========================= */
         .nav-glass {
             position: sticky;
             top: 0;
             z-index: 999;
-            backdrop-filter: blur(12px);
-            background:
-                linear-gradient(180deg, rgba(2, 4, 10, 0.95), rgba(2, 4, 10, 0.70)),
-                radial-gradient(700px 120px at 30% 0%, rgba(0, 229, 255, 0.10), transparent 60%),
-                radial-gradient(700px 120px at 70% 0%, rgba(122, 77, 255, 0.10), transparent 60%);
+            background: rgba(2, 4, 10, 0.86);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.62);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         }
 
         .brand {
@@ -67,10 +78,9 @@
             width: 34px;
             height: 34px;
             border-radius: 999px;
-            background:
-                conic-gradient(from 180deg, rgba(0, 229, 255, 0.65), rgba(122, 77, 255, 0.65), rgba(0, 229, 255, 0.65));
+            background: conic-gradient(from 180deg, rgba(0, 229, 255, 0.65), rgba(122, 77, 255, 0.65), rgba(0, 229, 255, 0.65));
             border: 1px solid rgba(255, 255, 255, 0.10);
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
             position: relative;
         }
 
@@ -85,48 +95,125 @@
 
         .brand .title {
             color: var(--cyan);
-            text-shadow: 0 0 16px rgba(0, 229, 255, 0.40);
+            text-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .nav-link.jjk {
             color: rgba(230, 241, 255, 0.86) !important;
-            font-weight: 850;
+            font-weight: 900;
             padding: 10px 14px;
             border-radius: 999px;
-            transition: all 0.25s ease;
+            text-decoration: none;
+            transition: transform .18s ease, background-color .18s ease, box-shadow .18s ease, color .18s ease;
+            will-change: transform;
             position: relative;
-        }
-
-        .nav-link.jjk::after {
-            content: "";
-            position: absolute;
-            left: 12px;
-            right: 12px;
-            bottom: 6px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
-            opacity: 0;
-            transform: translateY(6px);
-            transition: all 0.25s ease;
         }
 
         .nav-link.jjk:hover {
             background: rgba(255, 255, 255, 0.06);
             color: #fff !important;
+            transform: translateY(-1px);
             box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-        }
-
-        .nav-link.jjk:hover::after {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .nav-link.jjk.active {
             color: var(--cyan) !important;
-            background: rgba(0, 229, 255, 0.10);
+            background: rgba(0, 229, 255, 0.12);
             box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.18) inset;
         }
 
+        .nav-link.jjk .beam {
+            display: block;
+            height: 2px;
+            border-radius: 999px;
+            margin-top: 6px;
+            opacity: 0;
+            transform: scaleX(0.6);
+            transform-origin: left center;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            transition: opacity .18s ease, transform .18s ease;
+        }
+
+        .nav-link.jjk:hover .beam,
+        .nav-link.jjk.active .beam {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+
+        .nav-collapse {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: 12px;
+            padding-top: 12px;
+        }
+
+        .nav-toggler {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.05);
+            display: grid;
+            place-items: center;
+            transition: transform .18s ease, background-color .18s ease;
+            will-change: transform;
+        }
+
+        .nav-toggler:hover {
+            transform: scale(1.03);
+        }
+
+        .burger {
+            width: 18px;
+            height: 12px;
+            position: relative;
+        }
+
+        .burger span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-radius: 99px;
+            background: rgba(230, 241, 255, 0.92);
+            transition: transform .18s ease, opacity .18s ease, top .18s ease;
+        }
+
+        .burger span:nth-child(1) {
+            top: 0;
+        }
+
+        .burger span:nth-child(2) {
+            top: 5px;
+        }
+
+        .burger span:nth-child(3) {
+            top: 10px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .nav-link.jjk,
+            .nav-link.jjk .beam,
+            .nav-toggler,
+            .burger span {
+                transition: none !important;
+            }
+        }
+
+        /* ===== CLOCK ===== */
         .clock-pill {
             background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
             border: 1px solid rgba(255, 255, 255, 0.10);
@@ -141,16 +228,17 @@
             overflow: hidden;
         }
 
+        /* shimmer ringan */
         .clock-pill::before {
             content: "";
             position: absolute;
             inset: -40px;
             background: linear-gradient(120deg, transparent 40%, rgba(0, 229, 255, 0.10), rgba(122, 77, 255, 0.10), transparent 60%);
             transform: translateX(-30%);
-            opacity: 0.7;
-            filter: blur(10px);
+            opacity: 0.55;
+            filter: blur(6px);
             pointer-events: none;
-            animation: shimmer 5s linear infinite;
+            animation: shimmer 6s linear infinite;
         }
 
         @keyframes shimmer {
@@ -366,8 +454,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background:
-                linear-gradient(180deg, rgba(2, 4, 10, 0.10), rgba(2, 4, 10, 0.92));
+            background: linear-gradient(180deg, rgba(2, 4, 10, 0.10), rgba(2, 4, 10, 0.92));
             pointer-events: none;
         }
 
@@ -431,7 +518,6 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* responsive gallery */
         @media (max-width: 992px) {
             .gitem {
                 grid-column: span 6;
@@ -542,11 +628,13 @@
 </head>
 
 <body>
-    <!-- ===== NAV (CLOCK SAME POSITION) ===== -->
+
+    <!-- ===== NAVBAR (SAMA KAYAK PROFILE) ===== -->
     <nav class="nav-glass">
         <div class="container py-3">
-            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                <div class="d-flex align-items-center gap-3">
+
+            <div class="nav-inner">
+                <div class="d-flex align-items-center gap-3 flex-wrap">
                     <div class="brand">
                         <span class="sigil"></span>
                         <span class="title">JUJUTSU HIGH</span>
@@ -557,7 +645,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="nav-right">
                     <div class="clock-pill" id="clock-pill">
                         <span class="clock-dot"></span>
                         <div class="d-flex flex-column lh-sm">
@@ -566,22 +654,25 @@
                         </div>
                     </div>
 
-                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
+                    <button class="nav-toggler d-lg-none" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false"
-                        aria-label="Toggle navigation" style="border:1px solid rgba(255,255,255,0.16);">
-                        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+                        aria-label="Toggle navigation">
+                        <span class="burger" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </span>
                     </button>
                 </div>
             </div>
 
-            <div class="collapse d-lg-block mt-3" id="navMenu">
-                <div class="d-flex gap-2 flex-wrap">
-                    <a class="nav-link jjk" href="index.html">HOME</a>
-                    <a class="nav-link jjk" href="profile.html">PROFILE</a>
-                    <a class="nav-link jjk active" href="album.html">ALBUM</a>
-                    <a class="nav-link jjk" href="contact.html">CONTACT</a>
+            <div class="collapse d-lg-block nav-collapse" id="navMenu">
+                <div class="navbar-links">
+                    <a class="nav-link jjk" href="index.html">HOME<span class="beam"></span></a>
+                    <a class="nav-link jjk" href="profile.html">PROFILE<span class="beam"></span></a>
+                    <a class="nav-link jjk active" href="album.html">ALBUM<span class="beam"></span></a>
+                    <a class="nav-link jjk" href="contact.html">CONTACT<span class="beam"></span></a>
                 </div>
             </div>
+
         </div>
     </nav>
 
@@ -617,7 +708,6 @@
 
             <!-- ===== GALLERY ===== -->
             <section class="gallery" id="gallery">
-                <!-- Kamu tinggal ganti src gambarnya -->
                 <article class="gitem" data-tags="misi kutukan" data-title="Insiden Malam"
                     data-desc="Misi malam hari, tekanan tinggi, tetap fokus.">
                     <div class="thumb"><img src="./img/album1.jpg" alt="Album 1"></div>
@@ -797,10 +887,10 @@
                 p.classList.add("active");
                 currentFilter = p.dataset.filter;
                 applyFilter();
-            });
+            }, { passive: true });
         });
 
-        searchInput.addEventListener("input", applyFilter);
+        searchInput.addEventListener("input", applyFilter, { passive: true });
 
         // LIGHTBOX
         const lightboxEl = document.getElementById("lightbox");
@@ -822,13 +912,13 @@
                 lbDesc.textContent = desc;
 
                 lbTags.innerHTML = tags.map(t => `
-                <span class="tag" style="margin:0;">
+            <span class="tag" style="margin:0;">
             <span class="t-dot"></span> ${t}
             </span>
         `).join("");
 
                 modal.show();
-            });
+            }, { passive: true });
         });
     </script>
 
