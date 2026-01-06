@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PROFILE - JUJUTSU KAISEN</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg0: #02040a;
+      --bg1: #060b1a;
+      --text: #e6f1ff;
+
+      --cyan: #00e5ff;
+      --purple: #7a4dff;
+
+      --shadow: 0 22px 55px rgba(0, 0, 0, 0.65);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(520px 520px at 15% 12%, rgba(0, 229, 255, 0.12), transparent 62%),
+        radial-gradient(620px 520px at 90% 18%, rgba(122, 77, 255, 0.12), transparent 62%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 12px),
+        linear-gradient(rgba(2, 4, 10, 0.88), rgba(2, 4, 10, 0.94)),
+        url('./img/jjk-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV (SAME THEME + CLOCK POSITION SAME) ===== */
+    .nav-glass {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      backdrop-filter: blur(12px);
+      background:
+        linear-gradient(180deg, rgba(2, 4, 10, 0.95), rgba(2, 4, 10, 0.70)),
+        radial-gradient(700px 120px at 30% 0%, rgba(0, 229, 255, 0.10), transparent 60%),
+        radial-gradient(700px 120px at 70% 0%, rgba(122, 77, 255, 0.10), transparent 60%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.62);
+    }
+
+    .brand {
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .brand .sigil {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background:
+        conic-gradient(from 180deg, rgba(0, 229, 255, 0.65), rgba(122, 77, 255, 0.65), rgba(0, 229, 255, 0.65));
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
+      position: relative;
+    }
+
+    .brand .sigil::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: rgba(2, 4, 10, 0.85);
+      border: 1px dashed rgba(0, 229, 255, 0.22);
+    }
+
+    .brand .title {
+      color: var(--cyan);
+      text-shadow: 0 0 16px rgba(0, 229, 255, 0.40);
+    }
+
+    .nav-link.jjk {
+      color: rgba(230, 241, 255, 0.86) !important;
+      font-weight: 850;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .nav-link.jjk::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 6px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.25s ease;
+    }
+
+    .nav-link.jjk:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff !important;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+
+    .nav-link.jjk:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav-link.jjk.active {
+      color: var(--cyan) !important;
+      background: rgba(0, 229, 255, 0.10);
+      box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.18) inset;
+    }
+
+    .clock-pill {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 999px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.45);
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .clock-pill::before {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background: linear-gradient(120deg, transparent 40%, rgba(0, 229, 255, 0.10), rgba(122, 77, 255, 0.10), transparent 60%);
+      transform: translateX(-30%);
+      opacity: 0.7;
+      filter: blur(10px);
+      pointer-events: none;
+      animation: shimmer 5s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-40%); }
+      100% { transform: translateX(40%); }
+    }
+
+    .clock-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 99px;
+      background: linear-gradient(180deg, var(--cyan), var(--purple));
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.55);
+      position: relative;
+      z-index: 1;
+    }
+
+    .clock-main {
+      font-weight: 950;
+      letter-spacing: 0.8px;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+    }
+
+    .clock-sub {
+      font-size: 0.85rem;
+      opacity: 0.86;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== PAGE ===== */
+    .page { padding: 28px 16px 60px; }
+
+    /* ===== PROFILE HEADER ===== */
+    .profile-hero {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background:
+        radial-gradient(900px 520px at 20% 30%, rgba(0, 229, 255, 0.14), transparent 60%),
+        radial-gradient(900px 520px at 80% 30%, rgba(122, 77, 255, 0.14), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .profile-hero::before {
+      content: "";
+      position: absolute;
+      width: 780px;
+      height: 780px;
+      border-radius: 999px;
+      left: -360px;
+      top: -340px;
+      background:
+        conic-gradient(from 90deg, rgba(0, 229, 255, 0.22), rgba(122, 77, 255, 0.22), rgba(0, 229, 255, 0.22));
+      opacity: 0.55;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 18px rgba(255, 255, 255, 0.02) inset;
+      pointer-events: none;
+    }
+
+    .profile-hero .wrap { position: relative; z-index: 1; padding: 22px; }
+
+    .headline {
+      font-family: 'Cinzel', serif;
+      font-weight: 950;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+
+    .subline {
+      opacity: 0.86;
+      font-weight: 800;
+      margin: 6px 0 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(0, 229, 255, 0.16);
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+
+    .chip .c {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--cyan);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+    }
+
+    /* ===== GRID LAYOUT ===== */
+    .profile-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    @media (max-width: 992px) {
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      border-radius: var(--radius-xl);
+      background: rgba(10, 14, 28, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -70px;
+      background:
+        radial-gradient(360px 220px at 20% 20%, rgba(0, 229, 255, 0.14), transparent 60%),
+        radial-gradient(360px 220px at 80% 70%, rgba(122, 77, 255, 0.14), transparent 60%);
+      filter: blur(14px);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .panel .inner { position: relative; z-index: 1; padding: 18px; }
+
+    /* ==========================================================
+       AVATAR BOX (CHANGED TO "BANNER CONCEPT" LIKE FIRST HTML)
+       - position tetap
+       - height tetap 300px (GAK DIUBAH)
+       - gambar full kelihatan (contain)
+       ========================================================== */
+    .avatar-box {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid rgba(0, 229, 255, 0.18);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
+      height: 300px; /* ✅ ukuran tetap */
+      background: rgba(0, 0, 0, 0.25);
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;   /* ✅ banner-style: gambar utuh, ga kepotong */
+      object-position: center;
+      transform: none;       /* ✅ ga nge-zoom */
+      filter: contrast(1.06) saturate(1.06);
+      display: block;
+
+      padding: 10px;         /* ✅ frame halus seperti banner */
+      background: rgba(2, 4, 10, 0.55);
+    }
+
+    .avatar-box::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(2, 4, 10, 0.08), rgba(2, 4, 10, 0.38));
+      pointer-events: none;
+    }
+    /* ========================================================== */
+
+    .id-row {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .kv {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .kv .k { opacity: 0.78; font-weight: 900; }
+    .kv .v { font-weight: 950; color: var(--text); }
+
+    .mini-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .badge-x {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(0, 229, 255, 0.16);
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-x .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--purple);
+      box-shadow: 0 0 14px rgba(122, 77, 255, 0.7);
+    }
+
+    /* right: biography + skills */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 10px;
+    }
+
+    .section-title .bar {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.7);
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-family: 'Cinzel', serif;
+      font-weight: 950;
+      letter-spacing: 0.6px;
+    }
+
+    .ptext {
+      color: rgba(230, 241, 255, 0.86);
+      margin: 0 0 14px;
+      line-height: 1.65;
+      font-weight: 650;
+    }
+
+    .quote {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(0, 229, 255, 0.14);
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.35);
+      margin-bottom: 14px;
+    }
+
+    .quote b { color: var(--cyan); text-shadow: 0 0 14px rgba(0, 229, 255, 0.35); }
+
+    .skills {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .skill {
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .skill-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .skill-name {
+      font-weight: 950;
+      letter-spacing: 0.4px;
+    }
+
+    .skill-tag {
+      font-weight: 950;
+      color: var(--purple);
+      opacity: 0.95;
+    }
+
+    .barline {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .barline > span {
+      display: block;
+      height: 100%;
+      width: 60%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(0, 229, 255, 0.85), rgba(122, 77, 255, 0.85));
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.28);
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .titem {
+      display: grid;
+      grid-template-columns: 14px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .titem .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.6);
+      margin-top: 2px;
+      position: relative;
+    }
+
+    .titem .dot::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 14px;
+      width: 2px;
+      height: calc(100% + 12px);
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, rgba(0, 229, 255, 0.35), transparent);
+      opacity: 0.7;
+    }
+
+    .titem:last-child .dot::after { display: none; }
+
+    .titem h5 {
+      margin: 0 0 4px;
+      font-weight: 950;
+      color: var(--cyan);
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.4px;
+    }
+
+    .titem p {
+      margin: 0;
+      opacity: 0.86;
+      font-weight: 650;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      margin-top: 22px;
+      padding: 24px 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(10, 14, 28, 0.40), rgba(2, 4, 10, 0.92));
+    }
+
+    .footer-card {
+      border-radius: var(--radius-xl);
+      background: rgba(10, 14, 28, 0.55);
+      border: 1px solid rgba(122, 77, 255, 0.14);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      text-align: center;
+    }
+
+    .footer-name {
+      font-family: 'Cinzel', serif;
+      color: var(--cyan);
+      font-weight: 950;
+      letter-spacing: 1px;
+      text-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+      margin: 6px 0 2px;
+    }
+
+    .sep {
+      height: 2px;
+      width: 64%;
+      margin: 12px auto;
+      background: linear-gradient(to right, transparent, var(--cyan), transparent);
+      opacity: 0.55;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== NAV (CLOCK SAME POSITION) ===== -->
+  <nav class="nav-glass">
+    <div class="container py-3">
+      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+        <div class="d-flex align-items-center gap-3">
+          <div class="brand">
+            <span class="sigil"></span>
+            <span class="title">JUJUTSU HIGH</span>
+          </div>
+
+          <div class="d-none d-lg-block" style="opacity:0.78; font-weight:850;">
+            呪符 • Profile Archive • Sorcerer Registry
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <div class="clock-pill" id="clock-pill">
+            <span class="clock-dot"></span>
+            <div class="d-flex flex-column lh-sm">
+              <div class="clock-main" id="clock-time">--:--:--</div>
+              <div class="clock-sub" id="clock-date">-- --- ----</div>
+            </div>
+          </div>
+
+          <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+            aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation"
+            style="border:1px solid rgba(255,255,255,0.16);">
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="collapse d-lg-block mt-3" id="navMenu">
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="nav-link jjk" href="index.html">HOME</a>
+          <a class="nav-link jjk active" href="profile.html">PROFILE</a>
+          <a class="nav-link jjk" href="album.html">ALBUM</a>
+          <a class="nav-link jjk" href="contact.html">CONTACT</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="container">
+
+      <!-- ===== HEADER ===== -->
+      <section class="profile-hero">
+        <div class="wrap">
+          <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+            <div>
+              <div class="chip mb-2"><span class="c"></span> Sorcerer Profile</div>
+              <h1 class="headline display-6">
+                <span style="color:var(--cyan); text-shadow:0 0 18px rgba(0,229,255,0.35);">ITADORI YUJI</span>
+              </h1>
+              <p class="subline">Vessel • Close Combat Specialist • Tokyo Jujutsu High</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== GRID ===== -->
+      <section class="profile-grid">
+        <!-- LEFT: IDENTITY -->
+        <aside class="panel">
+          <div class="inner">
+            <div class="avatar-box">
+              <img src="./img/yujipotrait.jpg" alt="Yuji Portrait">
+            </div>
+
+            <div class="id-row">
+              <div class="kv">
+                <div class="k">Nama</div>
+                <div class="v">Itadori Yuji</div>
+              </div>
+              <div class="kv">
+                <div class="k">Afiliasi</div>
+                <div class="v">Tokyo Jujutsu High</div>
+              </div>
+              <div class="kv">
+                <div class="k">Peran</div>
+                <div class="v">Sorcerer (Student)</div>
+              </div>
+              <div class="kv">
+                <div class="k">Gaya</div>
+                <div class="v">Close Combat</div>
+              </div>
+            </div>
+
+            <div class="mini-badges">
+              <span class="badge-x"><span class="dot"></span> Cursed Energy Control</span>
+              <span class="badge-x"><span class="dot"></span> High Stamina</span>
+              <span class="badge-x"><span class="dot"></span> Fast Adaptation</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- RIGHT: BIO + SKILLS + TIMELINE -->
+        <article class="panel">
+          <div class="inner">
+            <div class="section-title">
+              <span class="bar"></span>
+              <h3>Biografi Singkat</h3>
+            </div>
+
+            <div class="quote">
+              <div style="font-weight:900; opacity:0.86; margin-bottom:4px;">Mantra</div>
+              <div style="font-size:1.05rem;">
+                <b>“Saving people is my job.”</b>
+                <div style="opacity:0.85; font-weight:650; margin-top:4px;">
+                  Fokus pada keselamatan orang lain, bahkan ketika situasi makin gelap.
+                </div>
+              </div>
+            </div>
+
+            <p class="ptext">
+              Yuji adalah siswa Jujutsu High yang dikenal punya fisik luar biasa dan mental kuat.
+              Ia bertarung dengan kombinasi insting, latihan, dan kontrol energi kutukan.
+              Dalam pertempuran, gaya Yuji menekankan timing, ketenangan, dan keberanian untuk maju.
+            </p>
+
+            <div class="section-title mt-3">
+              <span class="bar"></span>
+              <h3>Skill & Statistik</h3>
+            </div>
+
+            <div class="skills">
+              <div class="skill">
+                <div class="skill-head">
+                  <div class="skill-name">Kontrol Cursed Energy</div>
+                  <div class="skill-tag">85%</div>
+                </div>
+                <div class="barline"><span style="width:85%"></span></div>
+              </div>
+
+              <div class="skill">
+                <div class="skill-head">
+                  <div class="skill-name">Kecepatan & Refleks</div>
+                  <div class="skill-tag">80%</div>
+                </div>
+                <div class="barline"><span style="width:80%"></span></div>
+              </div>
+
+              <div class="skill">
+                <div class="skill-head">
+                  <div class="skill-name">Kekuatan Fisik</div>
+                  <div class="skill-tag">90%</div>
+                </div>
+                <div class="barline"><span style="width:90%"></span></div>
+              </div>
+
+              <div class="skill">
+                <div class="skill-head">
+                  <div class="skill-name">Strategi & Baca Situasi</div>
+                  <div class="skill-tag">75%</div>
+                </div>
+                <div class="barline"><span style="width:75%"></span></div>
+              </div>
+            </div>
+
+            <div class="section-title mt-4">
+              <span class="bar"></span>
+              <h3>Timeline Singkat</h3>
+            </div>
+
+            <div class="timeline">
+              <div class="titem">
+                <div class="dot"></div>
+                <div>
+                  <h5>Masuk Dunia Kutukan</h5>
+                  <p>Mulai mengenal realita cursed spirits dan risiko di balik kehidupan normal.</p>
+                </div>
+              </div>
+
+              <div class="titem">
+                <div class="dot"></div>
+                <div>
+                  <h5>Latihan Kontrol Energi</h5>
+                  <p>Belajar fokus, timing, dan disiplin untuk menahan energi agar tidak “bocor”.</p>
+                </div>
+              </div>
+
+              <div class="titem">
+                <div class="dot"></div>
+                <div>
+                  <h5>Misi Lapangan</h5>
+                  <p>Terjun ke kasus-kasus nyata dan membangun insting bertarung di situasi berbahaya.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </article>
+      </section>
+
+      <!-- ===== FOOTER ===== -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-card">
+            <div style="opacity:0.85; font-weight:900;">© 2026 Copyright</div>
+            <div class="footer-name">IRGIE MUHAMMAD BINTANG MAULANA ROTINSULU</div>
+            <div class="sep"></div>
+            <div style="font-weight:850; opacity:0.9;">NIM: 251011700034 • Kelas: 01SIFP001</div>
+            <div style="margin-top:8px; font-weight:950; color: var(--purple); text-shadow:0 0 14px rgba(122,77,255,0.35);">
+              “FOCUS. CONTROL. EXORCISE.”
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- ===== SCRIPTS (CLOCK) ===== -->
+  <script>
+    function refreshClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+
+      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+      document.getElementById("clock-time").textContent = `${h}:${m}:${s}`;
+      document.getElementById("clock-date").textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    }
+    setInterval(refreshClock, 1000);
+    refreshClock();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
